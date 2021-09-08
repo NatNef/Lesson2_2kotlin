@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         //вызываем MainFragment
         if(savedInstanceState==null)// при повороте сохраняет
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container,MainFragment.newInstans()).commit()
+            .replace(R.id.fragment_container,MainFragment.newInstance()).commit()
 
 
     }
