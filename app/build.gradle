@@ -7,6 +7,11 @@ android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
+    //включаем
+    buildFeatures{
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "keyone.keytwo.lesson2_2kotlin"
         minSdkVersion 23

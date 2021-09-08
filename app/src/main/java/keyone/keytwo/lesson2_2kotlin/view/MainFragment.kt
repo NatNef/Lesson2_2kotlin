@@ -9,16 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import keyone.keytwo.lesson2_2kotlin.R
+import keyone.keytwo.lesson2_2kotlin.databinding.FragmentMainBinding
 import keyone.keytwo.lesson2_2kotlin.viewmodel.MainViewModel
 
 class MainFragment:Fragment() {
+
+    // представление файла fragment_main.xml в виде кода
+    private lateinit var binding: FragmentMainBinding // FIXME утечка памяти
 
   //---------------------------------------------
     // реализуем viewmodel, ссылку
     //lateinit реализовать ссылку чуть позже
 
 private lateinit var viewModel:MainViewModel
-
 
 
 
@@ -38,6 +41,15 @@ private lateinit var viewModel:MainViewModel
         savedInstanceState: Bundle?
     ): View? {
 
+        //1 инфлейтим макет
+       // return inflater.inflate(R.layout.fragment_main, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding.TextView.text = "kakoito tekst"
+    }
+
+    // 2 все остальное
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         //ViewModelProvider жанглирует моделями и переживают смерть MainFragment
         //сохраняет состояние View
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
@@ -49,10 +61,13 @@ private lateinit var viewModel:MainViewModel
 
         //вызовем якобы запрос на сервер
         viewModel.getDataFromRemoteSource()
+        //-----------------------------
 
-        return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
 
-    //-----------------------------
     }
+
+
+
+
