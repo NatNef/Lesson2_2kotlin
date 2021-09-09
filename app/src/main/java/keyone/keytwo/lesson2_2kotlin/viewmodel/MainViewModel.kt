@@ -5,11 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import keyone.keytwo.lesson2_2kotlin.domain.Weather
 import java.lang.Thread.sleep
 
 // это хранилище всех ViewModel
 
-class MainViewModel(private val liveDataToObserve:MutableLiveData<Any> = MutableLiveData())
+class MainViewModel(private val liveDataToObserve:MutableLiveData<AppState> = MutableLiveData())
     :ViewModel() {
 
 //        fun getLiveData():LiveData<Any> {
@@ -26,7 +27,7 @@ class MainViewModel(private val liveDataToObserve:MutableLiveData<Any> = Mutable
         liveDataToObserve.postValue(AppState.Loading)
         Thread{
             sleep(2000)
-            liveDataToObserve.postValue(AppState.Success(Any()))
+            liveDataToObserve.postValue(AppState.Success(Weather()))
         }.start()
     }
 

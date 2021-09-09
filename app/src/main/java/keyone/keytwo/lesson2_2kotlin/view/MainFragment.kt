@@ -8,8 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import keyone.keytwo.lesson2_2kotlin.R
 import keyone.keytwo.lesson2_2kotlin.databinding.FragmentMainBinding
+import keyone.keytwo.lesson2_2kotlin.domain.Weather
+import keyone.keytwo.lesson2_2kotlin.viewmodel.AppState
 import keyone.keytwo.lesson2_2kotlin.viewmodel.MainViewModel
 
 class MainFragment:Fragment() {
@@ -62,8 +65,10 @@ private lateinit var viewModel:MainViewModel
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         //обработчикБ передаем viewLifecycleOwner
-        viewModel.getLiveData().observe(viewLifecycleOwner,Observer<Any>{
-            Toast.makeText(context,"its work", Toast.LENGTH_LONG).show()
+        // передаем наши состояния приложения ( до этого была заглушка Observer<Any>
+        viewModel.getLiveData().observe(viewLifecycleOwner,Observer<AppState>{
+           // Toast.makeText(context,"its work", Toast.LENGTH_LONG).show()
+            renderData(it)
         })
 
         //вызовем якобы запрос на сервер
@@ -72,7 +77,47 @@ private lateinit var viewModel:MainViewModel
 
     }
 
-    override fun OnDestroy() {
+    // функции делаем видимыми
+    fun renderData(appState: AppState){
+        when(appState){
+            is AppState.Error -> {
+                val throwable = appState.error
+            }
+
+            // делаем видимым прогресс бар призагрузке
+            // добавляем сообщение, когда нет значенний
+            // прописываем значения
+            AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+               // binding.message.text = ""
+
+            }
+            // при удаче делаем прогресс бар Не видимым
+            // добавляем сообщение, когда нет значенний
+            // прописываем значения
+            // добавляем Snackbar окошко снизу для ответа
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                val weather = appState.weatherData
+               // binding.message.text = "Готово"
+                setData(weather)
+                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    // прописываем выводим значенния
+    private fun setData(weather: Weather) {
+        binding.cityName.text = weather.city.name
+        binding.cityCoordinates.text = "lat ${weather.city.lat}\n lon ${weather.city.lon}"
+        binding.temperatureValue.text = weather.temperature.toString()
+        binding.feelsLikeLabel.text =  weather.feelsLike.toString()
+       // binding.feelsLikeLabel.text = "${weather.feelsLike}"
+    }
+
+    //_________________________________
+
+    override fun onDestroy() {
         super.onDestroy()
         _binding = null
 
