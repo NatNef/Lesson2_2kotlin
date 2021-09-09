@@ -15,9 +15,15 @@ import keyone.keytwo.lesson2_2kotlin.viewmodel.MainViewModel
 class MainFragment:Fragment() {
 
     // представление файла fragment_main.xml в виде кода
-    private lateinit var binding: FragmentMainBinding // FIXME утечка памяти
+ //   private lateinit var binding: FragmentMainBinding // FIXME утечка памяти
 
-  //---------------------------------------------
+    private var _binding: FragmentMainBinding? = null
+    private val binding:FragmentMainBinding
+    get(){
+        return _binding!!
+    }
+
+    //---------------------------------------------
     // реализуем viewmodel, ссылку
     //lateinit реализовать ссылку чуть позже
 
@@ -43,8 +49,9 @@ private lateinit var viewModel:MainViewModel
 
         //1 инфлейтим макет
        // return inflater.inflate(R.layout.fragment_main, container, false)
-        binding = FragmentMainBinding.inflate(inflater, container, false)
-        binding.TextView.text = "kakoito tekst"
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        //binding.TextView.text = "kakoito tekst"
+        return binding.root
     }
 
     // 2 все остальное
@@ -62,6 +69,12 @@ private lateinit var viewModel:MainViewModel
         //вызовем якобы запрос на сервер
         viewModel.getDataFromRemoteSource()
         //-----------------------------
+
+    }
+
+    override fun OnDestroy(){
+        super.onDestroy()
+        _binding = null
 
     }
 
