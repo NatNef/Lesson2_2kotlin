@@ -21,10 +21,12 @@ class MainViewModel(private val liveDataToObserve:MutableLiveData<Any> = Mutable
 
 
     // добавляем функцию, которая эмулирует запрос на сервер
+    // потом заглушки на состояния загрузка, удача, ошибка
     fun getDataFromRemoteSource(){
+        liveDataToObserve.postValue(AppState.Loading)
         Thread{
             sleep(2000)
-            liveDataToObserve.postValue(Any())
+            liveDataToObserve.postValue(AppState.Success(Any()))
         }.start()
     }
 

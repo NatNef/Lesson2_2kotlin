@@ -72,7 +72,7 @@ private lateinit var viewModel:MainViewModel
 
     }
 
-    override fun OnDestroy(){
+    override fun OnDestroy() {
         super.onDestroy()
         _binding = null
 
