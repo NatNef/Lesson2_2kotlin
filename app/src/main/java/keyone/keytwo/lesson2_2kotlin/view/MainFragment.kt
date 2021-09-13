@@ -27,7 +27,7 @@ class MainFragment:Fragment() {
     }
 
     //---------------------------------------------
-    // реализуем viewmodel, ссылку на него
+    // реализуем, создаем viewmodel, ссылку на него
     //lateinit реализовать ссылку чуть позже
 
 private lateinit var viewModel:MainViewModel
@@ -62,18 +62,19 @@ private lateinit var viewModel:MainViewModel
         super.onViewCreated(view, savedInstanceState)
         //ViewModelProvider жанглирует моделями и переживают смерть MainFragment
         //сохраняет состояние View
-        // создаем  viewModel
+        // создаем ссылку на  viewModel
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         //обработчикБ передаем viewLifecycleOwner
         // передаем наши состояния приложения ( до этого была заглушка Observer<Any>
         // подписываемся на viewModel обновления через getLiveData()
+        // вешаем обработчик на viewModel
         viewModel.getLiveData().observe(viewLifecycleOwner,Observer<AppState>{appState:AppState->
            // Toast.makeText(context,"its work", Toast.LENGTH_LONG).show()
             renderData(appState)
         })
 
-        //вызовем якобы запрос на сервер
+        //вызываем запрос на сервер
         viewModel.getDataFromRemoteSource()
         //-----------------------------
 

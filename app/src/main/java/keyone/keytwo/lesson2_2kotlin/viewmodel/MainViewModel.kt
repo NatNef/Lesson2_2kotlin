@@ -31,6 +31,7 @@ class MainViewModel(private val liveDataToObserve:MutableLiveData<AppState> = Mu
 
     // добавляем функцию, которая эмулирует запрос на сервер
     // потом /заглушки/ на состояния загрузка, удача, ошибка
+    // обновлет состояние и срабатывает renderData
     fun getDataFromRemoteSource(){
         liveDataToObserve.postValue(AppState.Loading)
         Thread{
