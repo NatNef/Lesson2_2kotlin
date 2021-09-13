@@ -27,7 +27,7 @@ class MainFragment:Fragment() {
     }
 
     //---------------------------------------------
-    // реализуем viewmodel, ссылку
+    // реализуем viewmodel, ссылку на него
     //lateinit реализовать ссылку чуть позже
 
 private lateinit var viewModel:MainViewModel
@@ -62,13 +62,15 @@ private lateinit var viewModel:MainViewModel
         super.onViewCreated(view, savedInstanceState)
         //ViewModelProvider жанглирует моделями и переживают смерть MainFragment
         //сохраняет состояние View
+        // создаем  viewModel
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         //обработчикБ передаем viewLifecycleOwner
         // передаем наши состояния приложения ( до этого была заглушка Observer<Any>
-        viewModel.getLiveData().observe(viewLifecycleOwner,Observer<AppState>{
+        // подписываемся на viewModel обновления через getLiveData()
+        viewModel.getLiveData().observe(viewLifecycleOwner,Observer<AppState>{appState:AppState->
            // Toast.makeText(context,"its work", Toast.LENGTH_LONG).show()
-            renderData(it)
+            renderData(appState)
         })
 
         //вызовем якобы запрос на сервер
@@ -78,10 +80,15 @@ private lateinit var viewModel:MainViewModel
     }
 
     // функции делаем видимыми
-    fun renderData(appState: AppState){
+    // выводим ошибку
+    private fun renderData(appState: AppState){
         when(appState){
             is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+
                 val throwable = appState.error
+
+                Snackbar.make(binding.mainView, "Error $throwable", Snackbar.LENGTH_LONG).show()
             }
 
             // делаем видимым прогресс бар призагрузке

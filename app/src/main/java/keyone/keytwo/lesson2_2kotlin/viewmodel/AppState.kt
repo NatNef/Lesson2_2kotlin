@@ -10,12 +10,13 @@ sealed class AppState {
 
     //____________________________
     // состояния нашего приложения
+
     // загpузка
 //    class Loading:AppState() //FIXME object
 //    // Fo запрещает создавать много лоэдинг
     object Loading:AppState() // состояние, оно есть и оно одно
 
-// загркзка
+// удача
     data class Success(val weatherData:Weather):AppState()
 
     // ошибка
